@@ -162,6 +162,9 @@ class DropdownSearch<T> extends StatefulWidget {
   ///if the callBack return FALSE, the opening of the popup will be cancelled
   final BeforePopupOpeningMultiSelection<T>? onBeforePopupOpeningMultiSelection;
 
+  ///Set an overflow for the selected item
+  final TextOverflow? textOverflow;
+
   DropdownSearch({
     Key? key,
     this.onSaved,
@@ -181,7 +184,8 @@ class DropdownSearch<T> extends StatefulWidget {
     this.compareFn,
     this.onBeforeChange,
     this.onBeforePopupOpening,
-    PopupProps<T> popupProps = const PopupProps.menu(),
+    PopupProps<T> popupProps = const PopupProps.menu(), 
+    this.textOverflow,
   })  : assert(
           !popupProps.showSelectedItems || T == String || compareFn != null,
         ),
@@ -215,7 +219,8 @@ class DropdownSearch<T> extends StatefulWidget {
     BeforeChangeMultiSelection<T>? onBeforeChange,
     BeforePopupOpeningMultiSelection<T>? onBeforePopupOpening,
     FormFieldValidator<List<T>>? validator,
-    DropdownSearchBuilderMultiSelection<T>? dropdownBuilder,
+    DropdownSearchBuilderMultiSelection<T>? dropdownBuilder, 
+    this.textOverflow,
   })  : assert(
           !popupProps.showSelectedItems || T == String || compareFn != null,
         ),
@@ -317,7 +322,7 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
               child: Text(
                 _selectedItemAsString(item),
                 style: Theme.of(context).textTheme.subtitle2,
-                overflow: TextOverflow.ellipsis,
+                overflow: widget.textOverflow,
               ),
             ),
             MaterialButton(
@@ -357,7 +362,9 @@ class DropdownSearchState<T> extends State<DropdownSearch<T>> {
         );
       }
       return Text(_selectedItemAsString(getSelectedItem),
-          style: Theme.of(context).textTheme.subtitle1);
+          style: Theme.of(context).textTheme.subtitle1,
+          overflow: widget.textOverflow,
+        );
     }
 
     return selectedItemWidget();
